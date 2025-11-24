@@ -81,7 +81,11 @@ export default function AddPhone({ onAdd }) {
       )}
 
       <br />
-      <button onClick={validateAndAdd} type="button">
+      <button
+        onClick={validateAndAdd}
+        type="button"
+        className="btn btn-success"
+      >
         Add
       </button>
     </div>
