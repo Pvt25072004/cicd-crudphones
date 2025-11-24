@@ -15,7 +15,7 @@ export default function UpdatePage() {
   }, [id]);
   const fetchPhone = async () => {
     try {
-      const res = await axios.get(`${API_URL}/api/phones`);
+      const res = await axios.get("/api/phones");
       const phone = res.data.find((p) => p._id === id);
       if (phone) {
         setNamePhone(phone.name);
@@ -28,7 +28,7 @@ export default function UpdatePage() {
 
   const handleUpdate = async () => {
     try {
-      await axios.put(`${API_URL}/api/update/${id}`, {
+      await axios.put("/api/update/${id}", {
         name: namePhone,
         price: pricePhone,
       });
