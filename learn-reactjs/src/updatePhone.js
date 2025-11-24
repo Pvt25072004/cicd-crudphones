@@ -53,7 +53,9 @@ export default function UpdatePage() {
         value={pricePhone}
         onChange={(e) => setPricePhone(e.target.value)}
       />
-      <button onClick={handleUpdate}>Update</button>
+      <button onClick={handleUpdate} className="btn btn-primary">
+        Update
+      </button>
     </div>
   );
 }
