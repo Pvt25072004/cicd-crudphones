@@ -8,7 +8,7 @@ export default function UpdatePage() {
   const navigate = useNavigate();
   const [namePhone, setNamePhone] = useState("");
   const [pricePhone, setPricePhone] = useState("");
-  const API_URL = process.env.REACT_APP_API_URL || "http://localhost:8080";
+  const API_URL = "";
 
   useEffect(() => {
     fetchPhone();
@@ -28,7 +28,7 @@ export default function UpdatePage() {
 
   const handleUpdate = async () => {
     try {
-      await axios.put("/api/update/${id}", {
+      await axios.put(`/api/update/${id}`, {
         name: namePhone,
         price: pricePhone,
       });

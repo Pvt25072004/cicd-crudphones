@@ -41,7 +41,7 @@ export default function Homepage() {
 
   const deleteData = async (id) => {
     try {
-      await axios.delete("/api/delete/${id}");
+      await axios.delete(`/api/delete/${id}`);
       setData(data.filter((item) => item._id !== id));
     } catch (error) {
       console.error(error);
