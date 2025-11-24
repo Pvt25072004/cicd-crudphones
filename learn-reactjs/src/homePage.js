@@ -9,7 +9,7 @@ export default function Homepage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
-  const API_URL = process.env.REACT_APP_API_URL || "http://localhost:8080";
+  const API_URL = "";
 
   useEffect(() => {
     fetchData();
@@ -17,7 +17,7 @@ export default function Homepage() {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(`${API_URL}/api/phones`);
+      const response = await axios.get("/api/phones");
       setData(response.data);
       setError(null);
     } catch (err) {
@@ -30,7 +30,7 @@ export default function Homepage() {
 
   const postData = async (newData) => {
     try {
-      const response = await axios.post(`${API_URL}/api/phone`, newData);
+      const response = await axios.post("/api/phone", newData);
       setData([...data, response.data]);
       return true;
     } catch (error) {
@@ -41,7 +41,7 @@ export default function Homepage() {
 
   const deleteData = async (id) => {
     try {
-      await axios.delete(`${API_URL}/api/delete/${id}`);
+      await axios.delete("/api/delete/${id}");
       setData(data.filter((item) => item._id !== id));
     } catch (error) {
       console.error(error);
