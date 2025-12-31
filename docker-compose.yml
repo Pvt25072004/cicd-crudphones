@@ -6,6 +6,17 @@ services:
     restart: always
     environment:
       - DB_URL=mongodb://mongo-db:27017/crud_products
+      - NODE_ENV=${NODE_ENV:-production}
+      - SESSION_SECRET=${SESSION_SECRET:-change-this-secret-key}
+      - FRONTEND_URL=${FRONTEND_URL:-http://localhost}
+      - ALLOWED_ORIGINS=${ALLOWED_ORIGINS:-}
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID:-}
+      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET:-}
+      - FACEBOOK_APP_ID=${FACEBOOK_APP_ID:-}
+      - FACEBOOK_APP_SECRET=${FACEBOOK_APP_SECRET:-}
+      - PORT=8080
+    env_file:
+      - ./CRUD MONGODB/.env
     depends_on:
       - mongo-db
     networks:
@@ -17,6 +28,13 @@ services:
     restart: always
     ports:
       - "80:80" # Mở port 80 cho người dùng truy cập
+    environment:
+      # Nếu dùng Nginx proxy, để REACT_APP_API_URL trống
+      # Nginx sẽ proxy /api sang backend
+      - REACT_APP_API_URL=${REACT_APP_API_URL:-}
+      - REACT_APP_FRONTEND_URL=${REACT_APP_FRONTEND_URL:-http://localhost}
+    env_file:
+      - ./learn-reactjs/.env
     depends_on:
       - backend
     networks:

@@ -1,10 +1,23 @@
 # Stage 1: Build React
 FROM node:18-alpine as build
 WORKDIR /app
+
+# Build arguments cho environment variables
+# Nếu không truyền, sẽ dùng giá trị mặc định (empty - dùng Nginx proxy)
+ARG REACT_APP_API_URL=
+ARG REACT_APP_FRONTEND_URL=
+ARG NODE_ENV=production
+
+# Set environment variables cho build
+ENV REACT_APP_API_URL=$REACT_APP_API_URL
+ENV REACT_APP_FRONTEND_URL=$REACT_APP_FRONTEND_URL
+ENV NODE_ENV=$NODE_ENV
+
 COPY package*.json ./
 RUN npm install
 COPY . .
-# Khi build cần truyền biến môi trường API (nếu không dùng proxy Nginx)
+
+# Build React app với environment variables
 RUN npm run build
 
 # Stage 2: Serve bằng Nginx

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import InputField from "./inputField";
+import { useProtectedAction } from "./hooks/useProtectedAction";
 
 export default function AddPhone({ onAdd }) {
   const [namePhone, setNamePhone] = useState("");
@@ -43,10 +44,13 @@ export default function AddPhone({ onAdd }) {
     return Object.keys(errors).length === 0;
   };
 
+  // Wrap action với authentication check
+  const protectedOnAdd = useProtectedAction(onAdd);
+
   const validateAndAdd = async () => {
     if (!validateAll()) return;
     // onAdd nên trả true/false (xem phần Api)
-    const success = await onAdd({ name: namePhone, price: pricePhone });
+    const success = await protectedOnAdd({ name: namePhone, price: pricePhone });
     if (success) {
       setNamePhone("");
       setPricePhone("");

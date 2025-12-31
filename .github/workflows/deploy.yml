@@ -2,7 +2,9 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches: ["main"] # or main
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
 
 jobs:
   build-and-push:
@@ -30,6 +32,15 @@ jobs:
           context: ./learn-reactjs
           push: true
           tags: phamvantien/phone-fe:latest
+          build-args: |
+            REACT_APP_API_URL=
+            REACT_APP_FRONTEND_URL=
+            NODE_ENV=production
+          # Note: Nếu cần custom API URL, có thể truyền qua secrets
+          # build-args: |
+          #   REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }}
+          #   REACT_APP_FRONTEND_URL=${{ secrets.REACT_APP_FRONTEND_URL }}
+          #   NODE_ENV=production
 
   deploy-to-ec2:
     needs: build-and-push
@@ -55,9 +66,17 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             cd /home/ubuntu/app
+            # Đảm bảo .env files tồn tại (nếu chưa có, tạo từ .env.example)
+            if [ ! -f "CRUD MONGODB/.env" ]; then
+              echo "⚠️  Backend .env file not found. Please create it manually on EC2."
+            fi
+            if [ ! -f "learn-reactjs/.env" ]; then
+              echo "⚠️  Frontend .env file not found. Please create it manually on EC2."
+            fi
             # Kéo image mới nhất về
             docker-compose pull
             # Chạy lại container (chỉ update cái nào thay đổi)
             docker-compose up -d --remove-orphans
             # Xóa image cũ cho đỡ rác
             docker image prune -f
+            echo "✅ Deployment completed!"
